@@ -76,8 +76,8 @@ const Map = () => {
       image:
         "https://sdk.bitmoji.com/render/panel/49490f4e-eabb-4cab-bcb6-69f361d66706-00b2b490-1f1a-4e1e-bfc7-764d868e876d-v1.png?transparent=1&palette=1",
       id: "11",
-      latitude: "19.0659",
-      longitude: "74.6524",
+      latitude: "12.9716",
+      longitude: "77.5946",
       name: "Shreya",
     },
   ];
