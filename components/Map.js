@@ -1,18 +1,110 @@
-import { StyleSheet, View, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  Platform,
+  PermissionsAndroid,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import BottomBar from "./BottomBar";
 import mapStyle from "./MapStyle";
 import { DotIndicator } from "react-native-indicators";
+// import { PERMISSIONS, check, request } from "react-native-permissions";
+import Geolocation from "react-native-geolocation-service";
 
 const Map = () => {
   const [loading, setLoading] = useState(true);
+  // const requestLocationPermission = async () => {
+  //   try {
+  //     if (Platform.OS === "ios") {
+  //       const result = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+  //       if (result === RESULTS.GRANTED) {
+  //         setCameraGranted(true);
+  //         return true;
+  //       } else if (result === RESULTS.DENIED) {
+  //         setLoading(false);
+  //         return false;
+  //       }
+  //       return false;
+  //     } else {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //         {
+  //           title: "Geolocation Permission",
+  //           message: "Can we access your location?",
+  //           buttonNeutral: "Ask Me Later",
+  //           buttonNegative: "Cancel",
+  //           buttonPositive: "OK",
+  //         }
+  //       );
+
+  //       console.log("granted", granted);
+  //       if (granted === "granted") {
+  //         console.log("You can use Geolocation");
+  //         return true;
+  //       } else {
+  //         console.log("You cannot use Geolocation");
+  //         return false;
+  //       }
+  //     }
+  //   } catch (err) {
+  //     return false;
+  //   }
+  // };
+  const [location, setLocation] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        setLoading(false);
+      },
+      (error) => {
+        console.log(error.code, error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+      }
+    );
+
+    // Watch the location
+    const watchId = Geolocation.watchPosition(
+      (position) => {
+        console.log(position);
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.log(error.code, error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+        distanceFilter: 10,
+      }
+    );
+
+    // Clear the watch
+    return () => {
+      Geolocation.clearWatch(watchId);
+    };
+    // setTimeout(() => {
+
+    // }, 2000);
+  }, [watchId]);
 
   const data = [
     {
@@ -106,8 +198,8 @@ const Map = () => {
               provider={PROVIDER_GOOGLE}
               style={{ width: "100%", height: "100%" }}
               initialRegion={{
-                latitude: 12.972442,
-                longitude: 77.580643,
+                latitude: location.latitude,
+                longitude: location.longitude,
                 latitudeDelta: 1.0922,
                 longitudeDelta: 1.0421,
               }}

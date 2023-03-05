@@ -51,5 +51,15 @@
 	<false/>
   <key>UIStatusBarStyle</key>
   <string>UIStatusBarStyleDefault</string>
+  <!-- <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>YOUR TEXT</string>
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>YOUR TEXT</string>
+  <key>NSLocationTemporaryUsageDescriptionDictionary</key>
+  <string>Your message to user when requesting access to camera.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Your message to user when requesting access to microphone.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Your message to user when requesting access to photo library.</string> -->
 </dict>
 </plist>
